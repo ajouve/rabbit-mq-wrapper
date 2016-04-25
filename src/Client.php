@@ -44,6 +44,7 @@ class Client
 
     public function consume($queue, $exchange, $routingKey, $callback)
     {
+        $queue = $this->channel->queue_declare($queue, false, false, false, false);
         $this->channel->queue_bind($queue, $exchange, $routingKey);
         $this->channel->basic_consume($queue, '', false, false, false, false, function ($amqpMessage) use($callback) {
             $message = new Message($amqpMessage);

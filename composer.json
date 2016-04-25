@@ -1,0 +1,32 @@
+
+{
+    "name": "ajouve/rabbitMQWrapper",
+    "type": "library",
+    "description": "rabbitMQWrapper is a wrapper for RabbitMQ",
+    "keywords": ["framework", "amqp", "RabbitMQ"],
+    "homepage": "https://github.com/ajouve/rabbitMQWrapper",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "ajouve",
+            "homepage": "https://github.com/ajouve"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0",
+        "php-amqplib/php-amqplib": "2.6.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "RabbitMQWrapper\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "RabbitMQWrapper\\Tests\\": "tests/"
+        }
+    }
+}

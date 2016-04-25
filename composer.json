@@ -1,10 +1,10 @@
 
 {
-    "name": "ajouve/rabbitMQWrapper",
+    "name": "ajouve/rabbit-mq-wrapper",
     "type": "library",
     "description": "rabbitMQWrapper is a wrapper for RabbitMQ",
     "keywords": ["framework", "amqp", "RabbitMQ"],
-    "homepage": "https://github.com/ajouve/rabbitMQWrapper",
+    "homepage": "https://github.com/ajouve/rabbit-mq-wrapper",
     "license": "MIT",
     "authors": [
         {

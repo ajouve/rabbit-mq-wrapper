@@ -50,7 +50,7 @@ class Client
      */
     public function consume($queue, $exchange, $routingKey, $callback)
     {
-        $this->channel->exchange_declare($exchange, 'fanout', false, false, false);
+        $this->channel->exchange_declare($exchange, 'topic', false, false, false);
         $this->channel->queue_declare($queue, false, false, false, false);
         $this->channel->queue_bind($queue, $exchange, $routingKey);
         $this->channel->basic_consume($queue, '', false, false, false, false, function ($amqpMessage) use($callback) {

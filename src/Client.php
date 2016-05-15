@@ -72,7 +72,7 @@ class Client
      */
     public function publish($message, $exchange, $routingKey = '')
     {
-        $this->channel->exchange_declare($exchange, 'fanout', false, false, false);
+        $this->channel->exchange_declare($exchange, 'topic', false, false, false);
         $this->channel->basic_publish(
             new AMQPMessage($message, ['content_type' => 'application/json']),
             $exchange,

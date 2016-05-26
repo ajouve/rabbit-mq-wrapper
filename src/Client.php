@@ -93,6 +93,7 @@ class Client
                 'x-dead-letter-exchange' => 'dead_letters',
                 'x-dead-letter-routing-key' => $routingKey . '.dead_letter'
             ]));
+            $this->channel->queue_bind($queue, $exchange, $routingKey);
         }
     }
 }

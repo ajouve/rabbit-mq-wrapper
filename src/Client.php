@@ -51,15 +51,7 @@ class Client
      */
     public function consume($queue, $exchange, $routingKey, $callback)
     {
-        $this->channel->exchange_declare('dead_letters', 'topic', false, true, false);
-        $this->channel->queue_declare('dead_letter:'.$queue, false, true, false, false);
-        $this->channel->queue_bind('dead_letter:'.$queue, 'dead_letters', $routingKey . '.dead_letter');
-
-        $this->channel->exchange_declare($exchange, 'topic', false, true, false);
-        $this->channel->queue_declare($queue, false, true, false, false, false, new AMQPTable([
-            'x-dead-letter-exchange' => 'dead_letters',
-            'x-dead-letter-routing-key' => $routingKey . '.dead_letter'
-        ]));
+        $this->declareComponents($routingKey, $exchange, $queue);
         $this->channel->basic_consume($queue, '', false, false, false, false, function ($amqpMessage) use($callback) {
             $message = new Message($amqpMessage);
             $callback($message);
@@ -79,11 +71,28 @@ class Client
      */
     public function publish($message, $exchange, $routingKey = '')
     {
-        $this->channel->exchange_declare($exchange, 'topic', false, false, false);
+        $this->declareComponents($routingKey, $exchange);
         $this->channel->basic_publish(
             new AMQPMessage($message, ['content_type' => 'application/json']),
             $exchange,
             $routingKey
         );
+    }
+
+    private function declareComponents($routingKey, $exchange, $queue = null)
+    {
+        $this->channel->exchange_declare('dead_letters', 'topic', false, true, false);
+        if ($queue !== null) {
+            $this->channel->queue_declare('dead_letter:'.$queue, false, true, false, false);
+            $this->channel->queue_bind('dead_letter:'.$queue, 'dead_letters', $routingKey . '.dead_letter');
+        }
+
+        $this->channel->exchange_declare($exchange, 'topic', false, true, false);
+        if ($queue !== null) {
+            $this->channel->queue_declare($queue, false, true, false, false, false, new AMQPTable([
+                'x-dead-letter-exchange' => 'dead_letters',
+                'x-dead-letter-routing-key' => $routingKey . '.dead_letter'
+            ]));
+        }
     }
 }

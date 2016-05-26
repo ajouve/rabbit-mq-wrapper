@@ -5,6 +5,7 @@ namespace RabbitMQWrapper;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
+use PhpAmqpLib\Wire\AMQPTable;
 
 /**
  * Class Client
@@ -55,10 +56,10 @@ class Client
         $this->channel->queue_bind('dead_letter:'.$queue, 'dead_letters', $routingKey . '.dead_letter');
 
         $this->channel->exchange_declare($exchange, 'topic', false, true, false);
-        $this->channel->queue_declare($queue, false, true, false, false, false, [
+        $this->channel->queue_declare($queue, false, true, false, false, false, new AMQPTable([
             'x-dead-letter-exchange' => 'dead_letters',
             'x-dead-letter-routing-key' => $routingKey . '.dead_letter'
-        ]);
+        ]));
         $this->channel->basic_consume($queue, '', false, false, false, false, function ($amqpMessage) use($callback) {
             $message = new Message($amqpMessage);
             $callback($message);

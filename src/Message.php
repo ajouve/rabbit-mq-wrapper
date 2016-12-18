@@ -20,6 +20,17 @@ class Message
         return $this->amqpMessage->body;
     }
 
+    public function getHeaders()
+    {
+        return $this->amqpMessage->get('application_headers')->getNativeData();
+    }
+
+    public function getHeader($name)
+    {
+        $headers = $this->getHeaders();
+        return isset($headers[$name]) ? $headers[$name] : null;
+    }
+    
     public function nack($reQueue = false)
     {
         $this->amqpMessage->delivery_info['channel']->basic_nack($this->amqpMessage->delivery_info['delivery_tag'], false, $reQueue);
